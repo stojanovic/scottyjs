@@ -1,12 +1,5 @@
-.body {
+body {
   margin: 0;
   padding: 0;
-  background: #EDEDED;
-}
-
-p {
-  margin: 10px;
-  color: #444;
-  font-family: sans-serif;
-  font-size: 100px;
+  background: #0c2e53;
 }

@@ -6,6 +6,7 @@ const AWS = require('aws-sdk')
 const scotty = require('../index')
 const inquirer = require('inquirer')
 const levelup = require('level')
+const colors = require('colors')
 const db = levelup(path.join(__dirname, '..', '/scotty-db'))
 
 // Supported regions from http://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region
@@ -25,6 +26,33 @@ const AWS_REGIONS = [
   'ap-northeast-1',
   'sa-east-1'
 ]
+
+function showHelp() {
+  return console.log(`
+    ${colors.magenta('Scotty')} ✤ ${colors.cyan('deploy static websites or folders to AWS S3 with a single command')}
+
+    ✤ ✤ ✤
+
+    USAGE:
+
+    ${colors.magenta('scotty {options}')} ${colors.gray('or')} ${colors.magenta('beam-me-up {options}')}
+
+    AVAILABLE OPTIONS:
+
+    ${colors.magenta('--help')}    ${colors.white.dim('or')} ${colors.magenta('-h')}    Print this help
+    ${colors.magenta('--version')} ${colors.white.dim('or')} ${colors.magenta('-v')}    Print the current version
+    ${colors.magenta('--quiet')}   ${colors.white.dim('or')} ${colors.magenta('-q')}    Suppress output when executing commands
+    ${colors.magenta('--website')} ${colors.white.dim('or')} ${colors.magenta('-w')}    Set uploaded folder as a static website, default: false
+    ${colors.magenta('--source')}  ${colors.white.dim('or')} ${colors.magenta('-s')}    Source of the folder that will be uploaded, default: current folder
+    ${colors.magenta('--bucket')}  ${colors.white.dim('or')} ${colors.magenta('-b')}    Name of the S3 bucket (default: name of the current folder)
+    ${colors.magenta('--region')}  ${colors.white.dim('or')} ${colors.magenta('-r')}    AWS region where the files will be uploaded, default: saved region if exists or a list to choose one if it is not saved yet
+
+    ✤ ✤ ✤
+
+    ${colors.magenta('Beam me up, Scotty!')}
+    More info: ${colors.cyan('https://github.com/stojanovic/scottyjs')}
+  `)
+}
 
 function readArgs() {
   return minimist(process.argv.slice(2), {
@@ -68,12 +96,12 @@ function cmd(console) {
 		return console.log(require(path.join(__dirname, '..', 'package.json')).version)
 
   if (args.help)
-		return console.log(`Help me up, Scotty`)
+		return showHelp()
 
   if (!AWS.config.credentials)
     return console.log(`Set AWS credentials first. Guide is available here: http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html`)
 
-  if (!AWS.config.region) {
+  if (!AWS.config.region)
     return getDefaultRegion()
       .catch(() => {
         return inquirer.prompt([{
