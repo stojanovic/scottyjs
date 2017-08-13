@@ -8,11 +8,16 @@ const inquirer = require('inquirer')
 const levelup = require('level')
 const colors = require('colors')
 
-let db = levelup(path.join(__dirname, '..', '/scotty-db'), {
-  createIfMissing: true
-}, err => {
+// TODO: simplify/six this
+let db = levelup(path.join(__dirname, '..', '/scotty-db'), {}, err => {
+  // There's an issue for those who needs to run `npm i -g` with sudo
+  // So we'll try to save DB in home dir
   if (err)
-    db = levelup(path.join('~', '/.scotty-db'))
+    db = levelup(path.join('~', '/.scotty-db'), {}, err => {
+      // And as a final fallback to TMP
+      if (err)
+        db = levelup(path.join('tmp', '/.scotty-db'))
+    })
 })
 
 // Supported regions from http://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region
@@ -60,6 +65,8 @@ function showHelp() {
 
     ${colors.magenta('Beam me up, Scotty!')}
     More info: ${colors.cyan('https://github.com/stojanovic/scottyjs')}
+
+    Changelog/release history: ${colors.cyan('https://github.com/stojanovic/scottyjs/releases')}
   `)
 }
 
@@ -95,7 +102,7 @@ function saveDefaultRegion(region) {
 function cmd(console) {
   const args = readArgs()
 
-  if (args.versiond)
+  if (args.version)
     return console.log(require(path.join(__dirname, '..', 'package.json')).version)
 
   if (args.help)
