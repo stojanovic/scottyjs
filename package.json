@@ -1,6 +1,6 @@
 {
   "name": "scottyjs",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A simple CLI tool that deploys your project to AWS S3",
   "main": "index.js",
   "bin": {
