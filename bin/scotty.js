@@ -31,21 +31,24 @@ function showHelp() {
   return console.log(`
     ${colors.magenta('Scotty')} ✤ ${colors.cyan('deploy static websites or folders to AWS S3 with a single command')}
 
+    ${colors.magenta('Version:')} ${colors.cyan(require(path.join(__dirname, '..', 'package.json')).version)}
+
     ✤ ✤ ✤
 
     USAGE:
 
-    ${colors.magenta('scotty {options}')} ${colors.gray('or')} ${colors.magenta('beam-me-up {options}')}
+    ${colors.magenta('scotty {options}')} ${colors.cyan('or')} ${colors.magenta('beam-me-up {options}')}
 
     AVAILABLE OPTIONS:
 
-    ${colors.magenta('--help')}    ${colors.white.dim('or')} ${colors.magenta('-h')}    Print this help
-    ${colors.magenta('--version')} ${colors.white.dim('or')} ${colors.magenta('-v')}    Print the current version
-    ${colors.magenta('--quiet')}   ${colors.white.dim('or')} ${colors.magenta('-q')}    Suppress output when executing commands
-    ${colors.magenta('--website')} ${colors.white.dim('or')} ${colors.magenta('-w')}    Set uploaded folder as a static website, default: false
-    ${colors.magenta('--source')}  ${colors.white.dim('or')} ${colors.magenta('-s')}    Source of the folder that will be uploaded, default: current folder
-    ${colors.magenta('--bucket')}  ${colors.white.dim('or')} ${colors.magenta('-b')}    Name of the S3 bucket (default: name of the current folder)
-    ${colors.magenta('--region')}  ${colors.white.dim('or')} ${colors.magenta('-r')}    AWS region where the files will be uploaded, default: saved region if exists or a list to choose one if it is not saved yet
+    ${colors.magenta('--help')}    ${colors.cyan('or')} ${colors.magenta('-h')}    Print this help
+    ${colors.magenta('--version')} ${colors.cyan('or')} ${colors.magenta('-v')}    Print the current version
+    ${colors.magenta('--quiet')}   ${colors.cyan('or')} ${colors.magenta('-q')}    Suppress output when executing commands
+    ${colors.magenta('--website')} ${colors.cyan('or')} ${colors.magenta('-w')}    Set uploaded folder as a static website ${colors.cyan('| default: false')}
+    ${colors.magenta('--spa')}              Set uploaded folder as a single page app and redirect all non-existing pages to index.html ${colors.cyan('| default: false')}
+    ${colors.magenta('--source')}  ${colors.cyan('or')} ${colors.magenta('-s')}    Source of the folder that will be uploaded ${colors.cyan('| default: current folder')}
+    ${colors.magenta('--bucket')}  ${colors.cyan('or')} ${colors.magenta('-b')}    Name of the S3 bucket ${colors.cyan('| default: name of the current folder')}
+    ${colors.magenta('--region')}  ${colors.cyan('or')} ${colors.magenta('-r')}    AWS region where the files will be uploaded ${colors.cyan('| default: saved region if exists or a list to choose one if it is not saved yet')}
 
     ✤ ✤ ✤
 
@@ -56,14 +59,14 @@ function showHelp() {
 
 function readArgs() {
   return minimist(process.argv.slice(2), {
-		alias: { h: 'help', v: 'version', q: 'quiet', w: 'website', s: 'source', b: 'bucket', r: 'region' },
-		string: ['source', 'bucket', 'region'],
-		boolean: ['quiet', 'website'],
-		default: {
+    alias: { h: 'help', v: 'version', q: 'quiet', w: 'website', s: 'source', b: 'bucket', r: 'region' },
+    string: ['source', 'bucket', 'region'],
+    boolean: ['quiet', 'website', 'spa'],
+    default: {
       source: process.cwd(),
       bucket: path.parse(process.cwd()).name
     }
-	})
+  })
 }
 
 function getDefaultRegion() {
@@ -90,13 +93,12 @@ function saveDefaultRegion(region) {
 
 function cmd(console) {
   const args = readArgs()
-  const command = args._ && args._.length && args._[0]
 
   if (args.versiond)
-		return console.log(require(path.join(__dirname, '..', 'package.json')).version)
+    return console.log(require(path.join(__dirname, '..', 'package.json')).version)
 
   if (args.help)
-		return showHelp()
+    return showHelp()
 
   if (!AWS.config.credentials)
     return console.log(`Set AWS credentials first. Guide is available here: http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html`)
@@ -114,14 +116,16 @@ function cmd(console) {
           .then(result => result.region)
           .then(saveDefaultRegion)
       })
-      .then(region => scotty(args.source, args.bucket, region, args.website, args.quiet, console))
+      .then(region => scotty(args.source, args.bucket, region, args.website, args.spa, args.quiet, console))
+      .then(() => process.exit(1))
+      .catch(() => process.exit(1))
 
-  return scotty(args.source, args.bucket, AWS.config.region, args.website, args.quiet, console)
+  return scotty(args.source, args.bucket, AWS.config.region, args.website, args.spa, args.quiet, console)
     .then(() => process.exit(1))
     .catch(() => process.exit(1))
 }
 
 if (require.main === module)
-  return cmd(console)
+  cmd(console)
 
 module.exports = cmd
