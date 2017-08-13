@@ -8,7 +8,9 @@
     "beam-me-up": "./bin/scotty.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "pretest": "eslint lib spec *.js",
+    "test": "node spec/support/jasmine-runner.js",
+    "debug": "node debug spec/support/jasmine-runner.js"
   },
   "keywords": [
     "cli",
@@ -26,7 +28,12 @@
     "mime": "^1.3.6",
     "minimist": "^1.2.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "eslint": "^3.19.0",
+    "eslint-config-defaults": "^9.0.0",
+    "jasmine": "^2.7.0",
+    "jasmine-spec-reporter": "^4.2.0"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/stojanovic/scottyjs.git"

@@ -117,6 +117,8 @@ function cmd(console) {
       .then(region => scotty(args.source, args.bucket, region, args.website, args.quiet, console))
 
   return scotty(args.source, args.bucket, AWS.config.region, args.website, args.quiet, console)
+    .then(() => process.exit(1))
+    .catch(() => process.exit(1))
 }
 
 if (require.main === module)
