@@ -43,7 +43,23 @@ beam-me-up {options}
 
 ### Examples
 
+#### _Create React App_ application
 
+To deploy [CRA](https://github.com/facebookincubator/create-react-app) apps simply run `npm build` in your project root folder to create build version.
+
+Then deploy build version using following command:
+
+```shell
+scotty --spa --source ./build
+```
+
+Or, if you want to specify bucket name run:
+
+```shell
+scotty --spa --source ./build --bucket some-bucket-name
+```
+
+With `--spa` flag, Scotty will set required redirects for your single page app, so your app can use pushState out of the box.
 
 ## Test
 
