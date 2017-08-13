@@ -36,6 +36,32 @@ beam-me-up {options}
 - _--version_ or _-v_ - Print the current version
 - _--quiet_ or _-q_ - Suppress output when executing commands
 - _--website_ or _-w_ - Set uploaded folder as a static website, default: false
+- _--spa_ - Set uploaded folder as a single page app, default: false
 - _--source_  or _-s_ - Source of the folder that will be uploaded, default: current folder
 - _--bucket_ or _-b_ - Name of the S3 bucket (default: name of the current folder)
 - _--region_ or _-r_ - AWS region where the files will be uploaded, default: saved region if exists or a list to choose one if it is not saved yet
+
+## Test
+
+We use [Jasmine](https://jasmine.github.io/) for unit and integration tests. Unless there is a very compelling reason to use something different, please continue using Jasmine for tests. The existing tests are in the [spec](spec) folder. Here are some useful command shortcuts:
+
+Run all the tests:
+
+```bash
+npm test
+```
+
+Run only some tests:
+
+```bash
+npm test -- filter=prefix
+```
+
+Get detailed hierarchical test name reporting:
+
+```bash
+npm test -- full
+```
+## License
+
+MIT -- see [LICENSE](LICENSE)
