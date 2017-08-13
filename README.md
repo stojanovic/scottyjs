@@ -9,7 +9,7 @@ Deploy static websites or folders to AWS S3 with a single command
 Scotty.js is available on NPM. Install it as a global dependency to be able to use `scotty` command anywhere:
 
 ```shell
-npm install scotty --global
+npm install scottyjs --global
 ```
 
 ## Use
