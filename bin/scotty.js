@@ -7,7 +7,13 @@ const scotty = require('../index')
 const inquirer = require('inquirer')
 const levelup = require('level')
 const colors = require('colors')
-const db = levelup(path.join(__dirname, '..', '/scotty-db'))
+
+let db = levelup(path.join(__dirname, '..', '/scotty-db'), {
+  createIfMissing: true
+}, err => {
+  if (err)
+    db = levelup(path.join('~', '/.scotty-db'))
+})
 
 // Supported regions from http://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region
 const AWS_REGIONS = [

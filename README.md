@@ -41,6 +41,10 @@ beam-me-up {options}
 - _--bucket_ or _-b_ - Name of the S3 bucket (default: name of the current folder)
 - _--region_ or _-r_ - AWS region where the files will be uploaded, default: saved region if exists or a list to choose one if it is not saved yet
 
+### Examples
+
+
+
 ## Test
 
 We use [Jasmine](https://jasmine.github.io/) for unit and integration tests. Unless there is a very compelling reason to use something different, please continue using Jasmine for tests. The existing tests are in the [spec](spec) folder. Here are some useful command shortcuts:
