@@ -81,13 +81,8 @@ function getDefaultRegion() {
 }
 
 function saveDefaultRegion(region) {
-  return new Promise((resolve, reject) => {
-    db.put('defaultRegion', region, err => {
-      if (err)
-        return reject(err)
-
-      resolve(region)
-    })
+  return new Promise((resolve) => {
+    db.put('defaultRegion', region, () => resolve(region))
   })
 }
 
