@@ -54,12 +54,13 @@ function showHelp() {
 
     ${colors.magenta('--help')}    ${colors.cyan('or')} ${colors.magenta('-h')}    Print this help
     ${colors.magenta('--version')} ${colors.cyan('or')} ${colors.magenta('-v')}    Print the current version
-    ${colors.magenta('--quiet')}   ${colors.cyan('or')} ${colors.magenta('-q')}    Suppress output when executing commands
+    ${colors.magenta('--quiet')}   ${colors.cyan('or')} ${colors.magenta('-q')}    Suppress output when executing commands ${colors.cyan('| default: false')}
     ${colors.magenta('--website')} ${colors.cyan('or')} ${colors.magenta('-w')}    Set uploaded folder as a static website ${colors.cyan('| default: false')}
     ${colors.magenta('--spa')}              Set uploaded folder as a single page app and redirect all non-existing pages to index.html ${colors.cyan('| default: false')}
     ${colors.magenta('--source')}  ${colors.cyan('or')} ${colors.magenta('-s')}    Source of the folder that will be uploaded ${colors.cyan('| default: current folder')}
     ${colors.magenta('--bucket')}  ${colors.cyan('or')} ${colors.magenta('-b')}    Name of the S3 bucket ${colors.cyan('| default: name of the current folder')}
     ${colors.magenta('--region')}  ${colors.cyan('or')} ${colors.magenta('-r')}    AWS region where the files will be uploaded ${colors.cyan('| default: saved region if exists or a list to choose one if it is not saved yet')}
+    ${colors.magenta('--force')}   ${colors.cyan('or')} ${colors.magenta('-f')}    Update the bucket and pick "eu-central-1" region without asking ${colors.cyan('| default: false')}
 
     ✤ ✤ ✤
 
@@ -72,9 +73,18 @@ function showHelp() {
 
 function readArgs() {
   return minimist(process.argv.slice(2), {
-    alias: { h: 'help', v: 'version', q: 'quiet', w: 'website', s: 'source', b: 'bucket', r: 'region' },
+    alias: {
+      h: 'help',
+      v: 'version',
+      q: 'quiet',
+      w: 'website',
+      s: 'source',
+      b: 'bucket',
+      r: 'region',
+      f: 'force'
+    },
     string: ['source', 'bucket', 'region'],
-    boolean: ['quiet', 'website', 'spa'],
+    boolean: ['quiet', 'website', 'spa', 'force'],
     default: {
       source: process.cwd(),
       bucket: path.parse(process.cwd()).name
@@ -114,6 +124,9 @@ function cmd(console) {
   if (!AWS.config.region)
     return getDefaultRegion()
       .catch(() => {
+        if (args.force)
+          return saveDefaultRegion('eu-central-1')
+
         return inquirer.prompt([{
           type: 'list',
           name: 'region',
@@ -124,11 +137,11 @@ function cmd(console) {
           .then(result => result.region)
           .then(saveDefaultRegion)
       })
-      .then(region => scotty(args.source, args.bucket, region, args.website, args.spa, args.quiet, console))
+      .then(region => scotty(args.source, args.bucket, region, args.website, args.spa, args.force, args.quiet, console))
       .then(() => process.exit(1))
       .catch(() => process.exit(1))
 
-  return scotty(args.source, args.bucket, AWS.config.region, args.website, args.spa, args.quiet, console)
+  return scotty(args.source, args.bucket, AWS.config.region, args.website, args.spa, args.force, args.quiet, console)
     .then(() => process.exit(1))
     .catch(() => process.exit(1))
 }

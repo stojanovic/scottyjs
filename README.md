@@ -40,6 +40,7 @@ beam-me-up {options}
 - _--source_  or _-s_ - Source of the folder that will be uploaded, default: current folder
 - _--bucket_ or _-b_ - Name of the S3 bucket (default: name of the current folder)
 - _--region_ or _-r_ - AWS region where the files will be uploaded, default: saved region if exists or a list to choose one if it is not saved yet
+- _--force_ or _-f_ - Update the bucket and pick "eu-central-1" region without asking
 
 ### Examples
 
