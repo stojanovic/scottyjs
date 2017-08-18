@@ -158,7 +158,8 @@ function cmd(console) {
 
 function beamUp (args, region, console) {
   return scotty(args.source, args.bucket, region, args.website, args.spa, args.update, args.force, args.quiet, console)
-    .then(endpoint => clipboardy.write(endpoint)).then(() => process.exit(1))
+    .then(endpoint => clipboardy.write(endpoint))
+    .then(() => process.exit(1))
     .catch(() => process.exit(1))
 }
 
