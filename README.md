@@ -34,13 +34,14 @@ beam-me-up {options}
 
 - _--help_ or _-h_ - Print this help
 - _--version_ or _-v_ - Print the current version
-- _--quiet_ or _-q_ - Suppress output when executing commands
-- _--website_ or _-w_ - Set uploaded folder as a static website, default: false
-- _--spa_ - Set uploaded folder as a single page app, default: false
-- _--source_  or _-s_ - Source of the folder that will be uploaded, default: current folder
+- _--quiet_ or _-q_ - Suppress output when executing commands (default: false)
+- _--website_ or _-w_ - Set uploaded folder as a static website (default: false)
+- _--spa_ - Set uploaded folder as a single page app (default: false)
+- _--source_  or _-s_ - Source of the folder that will be uploaded (default: current folder)
 - _--bucket_ or _-b_ - Name of the S3 bucket (default: name of the current folder)
 - _--region_ or _-r_ - AWS region where the files will be uploaded, default: saved region if exists or a list to choose one if it is not saved yet
-- _--force_ or _-f_ - Update the bucket and pick "eu-central-1" region without asking
+- _--force_ or _-f_ - Update the bucket and pick "eu-central-1" region without asking (default: false)
+- _--update_ or _-u_ - Update existing bucket (default: false)
 
 ### Examples
 

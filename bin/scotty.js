@@ -49,6 +49,7 @@ function showHelp() {
     ${colors.magenta('--bucket')}  ${colors.cyan('or')} ${colors.magenta('-b')}    Name of the S3 bucket ${colors.cyan('| default: name of the current folder')}
     ${colors.magenta('--region')}  ${colors.cyan('or')} ${colors.magenta('-r')}    AWS region where the files will be uploaded ${colors.cyan('| default: saved region if exists or a list to choose one if it is not saved yet')}
     ${colors.magenta('--force')}   ${colors.cyan('or')} ${colors.magenta('-f')}    Update the bucket and pick "eu-central-1" region without asking ${colors.cyan('| default: false')}
+    ${colors.magenta('--update')}  ${colors.cyan('or')} ${colors.magenta('-u')}    Update existing bucket ${colors.cyan('| default: false')}
 
     ✤ ✤ ✤
 
@@ -69,10 +70,11 @@ function readArgs() {
       s: 'source',
       b: 'bucket',
       r: 'region',
-      f: 'force'
+      f: 'force',
+      u: 'update'
     },
     string: ['source', 'bucket', 'region'],
-    boolean: ['quiet', 'website', 'spa', 'force'],
+    boolean: ['quiet', 'website', 'spa', 'force', 'update'],
     default: {
       source: process.cwd(),
       bucket: path.parse(process.cwd()).name
@@ -148,11 +150,11 @@ function cmd(console) {
           .then(result => result.region)
           .then(saveDefaultRegion)
       })
-      .then(region => scotty(args.source, args.bucket, region, args.website, args.spa, args.force, args.quiet, console))
+      .then(region => scotty(args.source, args.bucket, region, args.website, args.spa, args.update, args.force, args.quiet, console))
       .then(() => process.exit(1))
       .catch(() => process.exit(1))
 
-  return scotty(args.source, args.bucket, AWS.config.region, args.website, args.spa, args.force, args.quiet, console)
+  return scotty(args.source, args.bucket, AWS.config.region, args.website, args.spa, args.update, args.force, args.quiet, console)
     .then(() => process.exit(1))
     .catch(() => process.exit(1))
 }
