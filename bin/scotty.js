@@ -151,12 +151,12 @@ function cmd(console) {
           .then(result => result.region)
           .then(saveDefaultRegion)
       })
-      .then(region => beamUp(args, region))
+      .then(region => beamUp(args, region, console))
 
-  return beamUp(args, AWS.config.region)
+  return beamUp(args, AWS.config.region, console)
 }
 
-function beamUp (args, region) {
+function beamUp (args, region, console) {
   return scotty(args.source, args.bucket, region, args.website, args.spa, args.update, args.force, args.quiet, console)
     .then(endpoint => clipboardy.write(endpoint)).then(() => process.exit(1))
     .catch(() => process.exit(1))
