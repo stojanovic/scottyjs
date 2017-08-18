@@ -48,7 +48,7 @@ function showHelp() {
     ${colors.magenta('--source')}  ${colors.cyan('or')} ${colors.magenta('-s')}    Source of the folder that will be uploaded ${colors.cyan('| default: current folder')}
     ${colors.magenta('--bucket')}  ${colors.cyan('or')} ${colors.magenta('-b')}    Name of the S3 bucket ${colors.cyan('| default: name of the current folder')}
     ${colors.magenta('--region')}  ${colors.cyan('or')} ${colors.magenta('-r')}    AWS region where the files will be uploaded ${colors.cyan('| default: saved region if exists or a list to choose one if it is not saved yet')}
-    ${colors.magenta('--force')}   ${colors.cyan('or')} ${colors.magenta('-f')}    Update the bucket and pick "us-east-1" region without asking ${colors.cyan('| default: false')}
+    ${colors.magenta('--force')}   ${colors.cyan('or')} ${colors.magenta('-f')}    Update the bucket without asking ${colors.cyan('| default: false')} (region can be overridden with ${colors.magenta('--region')})
     ${colors.magenta('--update')}  ${colors.cyan('or')} ${colors.magenta('-u')}    Update existing bucket ${colors.cyan('| default: false')}
 
     ✤ ✤ ✤
@@ -138,7 +138,7 @@ function cmd(console) {
     return getDefaultRegion()
       .catch(() => {
         if (args.force)
-          return saveDefaultRegion('us-east-1')
+          return saveDefaultRegion(args.region || 'us-east-1')
 
         return inquirer.prompt([{
           type: 'list',
