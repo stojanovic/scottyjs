@@ -2,3 +2,4 @@ node_modules
 .DS_Store
 scotty-db
 .scotty-config.json
+.idea
