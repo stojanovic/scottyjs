@@ -135,11 +135,11 @@ function cmd(console) {
   if (!AWS.config.credentials)
     return console.log(`Set AWS credentials first. Guide is available here: http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html`)
 
-  if (!AWS.config.region)
+  if (!args.region) {
     return getDefaultRegion()
       .catch(() => {
         if (args.force)
-          return saveDefaultRegion(args.region || 'us-east-1')
+          return 'us-east-1'
 
         return inquirer.prompt([{
           type: 'list',
@@ -152,8 +152,10 @@ function cmd(console) {
           .then(saveDefaultRegion)
       })
       .then(region => beamUp(args, region, console))
+  }
 
-  return beamUp(args, AWS.config.region, console)
+  return saveDefaultRegion(args.region)
+    .then(() => beamUp(args, args.region, console))
 }
 
 function beamUp (args, region, console) {
