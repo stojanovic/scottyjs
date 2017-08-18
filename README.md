@@ -2,7 +2,10 @@
 
 Deploy static websites or folders to AWS S3 with a single command
 
-<img width="150" src="https://raw.githubusercontent.com/stojanovic/scottyjs/master/scotty-logo.png" alt="scotty">
+<h1 align="center">
+  <img width="400" src="https://raw.githubusercontent.com/stojanovic/scottyjs/master/scotty-header.png" alt="scotty header">
+  <br/>
+</hr>
 
 ## Install
 
