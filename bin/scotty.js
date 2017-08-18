@@ -7,6 +7,7 @@ const AWS = require('aws-sdk')
 const scotty = require('../index')
 const inquirer = require('inquirer')
 const colors = require('colors')
+const clipboardy = require('clipboardy')
 
 // Supported regions from http://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region
 const AWS_REGIONS = [
@@ -48,7 +49,7 @@ function showHelp() {
     ${colors.magenta('--source')}  ${colors.cyan('or')} ${colors.magenta('-s')}    Source of the folder that will be uploaded ${colors.cyan('| default: current folder')}
     ${colors.magenta('--bucket')}  ${colors.cyan('or')} ${colors.magenta('-b')}    Name of the S3 bucket ${colors.cyan('| default: name of the current folder')}
     ${colors.magenta('--region')}  ${colors.cyan('or')} ${colors.magenta('-r')}    AWS region where the files will be uploaded ${colors.cyan('| default: saved region if exists or a list to choose one if it is not saved yet')}
-    ${colors.magenta('--force')}   ${colors.cyan('or')} ${colors.magenta('-f')}    Update the bucket and pick "us-east-1" region without asking ${colors.cyan('| default: false')}
+    ${colors.magenta('--force')}   ${colors.cyan('or')} ${colors.magenta('-f')}    Update the bucket without asking, region can be overridden with ${colors.magenta('-r')} ${colors.cyan('| default: false')} 
     ${colors.magenta('--update')}  ${colors.cyan('or')} ${colors.magenta('-u')}    Update existing bucket ${colors.cyan('| default: false')}
 
     ✤ ✤ ✤
@@ -134,11 +135,11 @@ function cmd(console) {
   if (!AWS.config.credentials)
     return console.log(`Set AWS credentials first. Guide is available here: http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html`)
 
-  if (!AWS.config.region)
+  if (!args.region) {
     return getDefaultRegion()
       .catch(() => {
         if (args.force)
-          return saveDefaultRegion('us-east-1')
+          return 'us-east-1'
 
         return inquirer.prompt([{
           type: 'list',
@@ -150,11 +151,16 @@ function cmd(console) {
           .then(result => result.region)
           .then(saveDefaultRegion)
       })
-      .then(region => scotty(args.source, args.bucket, region, args.website, args.spa, args.update, args.force, args.quiet, console))
-      .then(() => process.exit(1))
-      .catch(() => process.exit(1))
+      .then(region => beamUp(args, region, console))
+  }
 
-  return scotty(args.source, args.bucket, AWS.config.region, args.website, args.spa, args.update, args.force, args.quiet, console)
+  return saveDefaultRegion(args.region)
+    .then(() => beamUp(args, args.region, console))
+}
+
+function beamUp (args, region, console) {
+  return scotty(args.source, args.bucket, region, args.website, args.spa, args.update, args.force, args.quiet, console)
+    .then(endpoint => clipboardy.write(endpoint))
     .then(() => process.exit(1))
     .catch(() => process.exit(1))
 }
