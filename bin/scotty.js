@@ -7,6 +7,7 @@ const AWS = require('aws-sdk')
 const scotty = require('../index')
 const inquirer = require('inquirer')
 const colors = require('colors')
+const clipboardy = require('clipboardy')
 
 // Supported regions from http://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region
 const AWS_REGIONS = [
@@ -150,12 +151,14 @@ function cmd(console) {
           .then(result => result.region)
           .then(saveDefaultRegion)
       })
-      .then(region => scotty(args.source, args.bucket, region, args.website, args.spa, args.update, args.force, args.quiet, console))
-      .then(() => process.exit(1))
-      .catch(() => process.exit(1))
+      .then(region => beamUp(args, region))
 
-  return scotty(args.source, args.bucket, AWS.config.region, args.website, args.spa, args.update, args.force, args.quiet, console)
-    .then(() => process.exit(1))
+  return beamUp(args, AWS.config.region)
+}
+
+function beamUp (args, region) {
+  return scotty(args.source, args.bucket, region, args.website, args.spa, args.update, args.force, args.quiet, console)
+    .then(endpoint => clipboardy.write(endpoint)).then(() => process.exit(1))
     .catch(() => process.exit(1))
 }
 
