@@ -44,7 +44,7 @@ describe('Create a bucket', () => {
   })
 
   it('should invoke createBucket method of s3 class', done => {
-    underTest('bucketName', 'eu-central-1', s3spy)
+    underTest('bucketName', 'us-east-1', s3spy)
       .then(() => {
         expect(s3spy.createBucket).toHaveBeenCalled()
         done()
@@ -53,13 +53,13 @@ describe('Create a bucket', () => {
   })
 
   it('should invoke createBucket method of s3 class with options', done => {
-    underTest('bucketName', 'eu-central-1', s3spy)
+    underTest('bucketName', 'us-east-1', s3spy)
       .then(() => {
         expect(s3spy.createBucket).toHaveBeenCalledWith({
           Bucket: 'bucketName',
           ACL: 'public-read',
           CreateBucketConfiguration: {
-            LocationConstraint: 'eu-central-1'
+            LocationConstraint: 'us-east-1'
           }
         })
         done()
