@@ -1,24 +1,12 @@
 #!/usr/bin/env node
 
+const fs = require('fs')
 const path = require('path')
 const minimist = require('minimist')
 const AWS = require('aws-sdk')
 const scotty = require('../index')
 const inquirer = require('inquirer')
-const levelup = require('level')
 const colors = require('colors')
-
-// TODO: simplify/six this
-let db = levelup(path.join(__dirname, '..', '/scotty-db'), {}, err => {
-  // There's an issue for those who needs to run `npm i -g` with sudo
-  // So we'll try to save DB in home dir
-  if (err)
-    db = levelup(path.join('~', '/.scotty-db'), {}, err => {
-      // And as a final fallback to TMP
-      if (err)
-        db = levelup(path.join('tmp', '/.scotty-db'))
-    })
-})
 
 // Supported regions from http://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region
 const AWS_REGIONS = [
@@ -94,18 +82,41 @@ function readArgs() {
 
 function getDefaultRegion() {
   return new Promise((resolve, reject) => {
-    db.get('defaultRegion', (err, region) => {
-      if (err)
-        return reject(err)
+    fs.readFile(path.join(__dirname, '..', '.scotty-config.json'), (err, data) => {
+      if (err && err.code === 'ENOENT') {
+        fs.readFile(path.join('/tmp', '.scotty-config.json'), (err, data) => {
+          if (data) {
+            const region = JSON.parse(data.toString('utf8')).region
+            if (region)
+              return resolve(region)
+          }
 
-      resolve(region)
+          reject('No default region')
+        })
+      }
+
+      if (data) {
+        const region = JSON.parse(data.toString('utf8')).region
+        if (region)
+          return resolve(region)
+      }
+
+      reject('No default region')
     })
   })
 }
 
 function saveDefaultRegion(region) {
   return new Promise((resolve) => {
-    db.put('defaultRegion', region, () => resolve(region))
+    fs.writeFile(path.join(__dirname, '..', '.scotty-config.json'), `{"region":"${region}"}`, 'utf8', err => {
+      if (err) {
+        fs.writeFile(path.join('/tmp', '.scotty-config.json'), `{"region":"${region}"}`, 'utf8', () => {
+          resolve(region)
+        })
+      }
+
+      resolve(region)
+    })
   })
 }
 
