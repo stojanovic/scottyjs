@@ -43,7 +43,7 @@ beam-me-up {options}
 - _--source_  or _-s_ - Source of the folder that will be uploaded (default: current folder)
 - _--bucket_ or _-b_ - Name of the S3 bucket (default: name of the current folder)
 - _--region_ or _-r_ - AWS region where the files will be uploaded, default: saved region if exists or a list to choose one if it is not saved yet
-- _--force_ or _-f_ - Update the bucket and pick "us-east-1" region without asking (default: false)
+- _--force_ or _-f_ - Update the bucket without asking (default: false, forced region can be overridden with _-r_)
 - _--update_ or _-u_ - Update existing bucket (default: false)
 
 ### Examples
@@ -52,7 +52,7 @@ beam-me-up {options}
 
 Full tutorial: http://medium.com/@slobodan/single-command-deployment-for-single-page-apps-29941d62ef97
 
-To deploy [CRA](https://github.com/facebookincubator/create-react-app) apps simply run `npm build` in your project root folder to create build version.
+To deploy [CRA](https://github.com/facebookincubator/create-react-app) apps simply run `npm run build` in your project root folder to create build version.
 
 Then deploy build version using following command:
 
