@@ -52,7 +52,7 @@ beam-me-up {options}
 
 Full tutorial: http://medium.com/@slobodan/single-command-deployment-for-single-page-apps-29941d62ef97
 
-To deploy [CRA](https://github.com/facebookincubator/create-react-app) apps simply run `npm build` in your project root folder to create build version.
+To deploy [CRA](https://github.com/facebookincubator/create-react-app) apps simply run `npm run build` in your project root folder to create build version.
 
 Then deploy build version using following command:
 
