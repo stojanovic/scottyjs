@@ -19,7 +19,7 @@ npm install scottyjs --global
 
 > Beam me up, Scotty
 
-![](intro.gif)
+![](scotty-intro.gif)
 
 To deploy a static folder to AWS S3 run:
 
