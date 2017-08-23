@@ -7,6 +7,11 @@ Deploy static websites or folders to AWS S3 with a single command
   <br/>
 </hr>
 
+[![Build Status](https://travis-ci.org/stojanovic/scottyjs.svg?branch=master)](https://travis-ci.org/stojanovic/scottyjs)
+[![npm](https://img.shields.io/npm/v/scottyjs.svg?maxAge=2592000?style=plastic)](https://www.npmjs.com/package/scottyjs)
+[![npm](https://img.shields.io/npm/dt/scottyjs.svg?maxAge=2592000?style=plastic)](https://www.npmjs.com/package/scottyjs)
+[![npm](https://img.shields.io/npm/l/v.svg?maxAge=2592000?style=plastic)](https://github.com/stojanovic/scottyjs/blob/master/LICENSE)
+
 ## Install
 
 Scotty.js is available on NPM. Install it as a global dependency to be able to use `scotty` command anywhere:
