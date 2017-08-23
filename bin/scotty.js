@@ -54,7 +54,6 @@ function showHelp() {
     ${colors.magenta('--zone')}    ${colors.cyan('or')} ${colors.magenta('-z')}    AWS Route53 ZoneId of the dns delegation ${colors.cyan('| default: false')}
     ${colors.magenta('--force')}   ${colors.cyan('or')} ${colors.magenta('-f')}    Update the bucket without asking, region can be overridden with ${colors.magenta('-r')} ${colors.cyan('| default: false')}
     ${colors.magenta('--update')}  ${colors.cyan('or')} ${colors.magenta('-u')}    Update existing bucket ${colors.cyan('| default: false')}
-
     ✤ ✤ ✤
 
     ${colors.magenta('Beam me up, Scotty!')}
