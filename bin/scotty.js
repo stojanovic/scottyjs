@@ -50,9 +50,10 @@ function showHelp() {
     ${colors.magenta('--source')}  ${colors.cyan('or')} ${colors.magenta('-s')}    Source of the folder that will be uploaded ${colors.cyan('| default: current folder')}
     ${colors.magenta('--bucket')}  ${colors.cyan('or')} ${colors.magenta('-b')}    Name of the S3 bucket ${colors.cyan('| default: name of the current folder')}
     ${colors.magenta('--region')}  ${colors.cyan('or')} ${colors.magenta('-r')}    AWS region where the files will be uploaded ${colors.cyan('| default: saved region if exists or a list to choose one if it is not saved yet')}
+    ${colors.magenta('--domain')}  ${colors.cyan('or')} ${colors.magenta('-d')}    The owned domain name ${colors.cyan('| default: false')}
+    ${colors.magenta('--zone')}    ${colors.cyan('or')} ${colors.magenta('-z')}    AWS Route53 ZoneId of the dns delegation ${colors.cyan('| default: false')}
     ${colors.magenta('--force')}   ${colors.cyan('or')} ${colors.magenta('-f')}    Update the bucket without asking, region can be overridden with ${colors.magenta('-r')} ${colors.cyan('| default: false')}
     ${colors.magenta('--update')}  ${colors.cyan('or')} ${colors.magenta('-u')}    Update existing bucket ${colors.cyan('| default: false')}
-
     ✤ ✤ ✤
 
     ${colors.magenta('Beam me up, Scotty!')}
@@ -72,14 +73,18 @@ function readArgs() {
       s: 'source',
       b: 'bucket',
       r: 'region',
+      d: 'domain',
+      z: 'zoneId',
       f: 'force',
       u: 'update'
     },
-    string: ['source', 'bucket', 'region'],
+    string: ['source', 'bucket', 'region', 'domain', 'zoneId'],
     boolean: ['quiet', 'website', 'spa', 'force', 'update'],
     default: {
       source: process.cwd(),
-      bucket: path.parse(process.cwd()).name
+      bucket: path.parse(process.cwd()).name,
+      zone: false,
+      name: false
     }
   })
 }
@@ -159,10 +164,19 @@ function cmd(console) {
     .then(() => beamUp(args, args.region, console))
 }
 
+
 function beamUp (args, region, console) {
-  return scotty(args.source, args.bucket, region, args.website, args.spa, args.update, args.force, args.quiet, console)
-    .then(endpoint => clipboardy.write(endpoint))
-    .then(() => process.exit(0))
+  const options = Object.assign({
+    logger: console
+  }, args, {region})
+  return scotty(options)
+    .then(endpoint => {
+      return new Promise(resolve => {
+        clipboardy.write(endpoint)
+          .then(() => resolve(true))
+          .catch(err => console.log(`${colors.yellow('Copy to clipboard issue')} ${err.message}`))
+      })
+    })
     .catch(() => process.exit(1))
 }
 
