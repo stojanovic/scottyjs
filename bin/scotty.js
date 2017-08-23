@@ -167,7 +167,7 @@ function cmd(console) {
 
 
 function beamUp (args, region, console) {
-  const options = Object.extend({
+  const options = Object.assign({
     logger: console
   }, args, {region})
   return scotty(options)
