@@ -171,8 +171,13 @@ function beamUp (args, region, console) {
     logger: console
   }, args, {region})
   return scotty(options)
-    .then(endpoint => clipboardy.write(endpoint))
-    .then(() => process.exit(1))
+    .then(endpoint => {
+      return new Promise(resolve => {
+        clipboardy.write(endpoint)
+          .then(() => resolve(true))
+          .catch(err => console.log(`${colors.yellow('Copy to clipboard issue')} ${err.message}`))
+      })
+    })
     .catch(() => process.exit(1))
 }
 
