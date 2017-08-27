@@ -24,7 +24,8 @@ const AWS_REGIONS = [
   'ap-southeast-1',
   'ap-southeast-2',
   'ap-northeast-1',
-  'sa-east-1'
+  'sa-east-1',
+  'cn-north-1'
 ]
 
 function showHelp() {
@@ -49,7 +50,7 @@ function showHelp() {
     ${colors.magenta('--source')}  ${colors.cyan('or')} ${colors.magenta('-s')}    Source of the folder that will be uploaded ${colors.cyan('| default: current folder')}
     ${colors.magenta('--bucket')}  ${colors.cyan('or')} ${colors.magenta('-b')}    Name of the S3 bucket ${colors.cyan('| default: name of the current folder')}
     ${colors.magenta('--region')}  ${colors.cyan('or')} ${colors.magenta('-r')}    AWS region where the files will be uploaded ${colors.cyan('| default: saved region if exists or a list to choose one if it is not saved yet')}
-    ${colors.magenta('--force')}   ${colors.cyan('or')} ${colors.magenta('-f')}    Update the bucket without asking, region can be overridden with ${colors.magenta('-r')} ${colors.cyan('| default: false')} 
+    ${colors.magenta('--force')}   ${colors.cyan('or')} ${colors.magenta('-f')}    Update the bucket without asking, region can be overridden with ${colors.magenta('-r')} ${colors.cyan('| default: false')}
     ${colors.magenta('--update')}  ${colors.cyan('or')} ${colors.magenta('-u')}    Update existing bucket ${colors.cyan('| default: false')}
 
     ✤ ✤ ✤
@@ -161,7 +162,7 @@ function cmd(console) {
 function beamUp (args, region, console) {
   return scotty(args.source, args.bucket, region, args.website, args.spa, args.update, args.force, args.quiet, console)
     .then(endpoint => clipboardy.write(endpoint))
-    .then(() => process.exit(1))
+    .then(() => process.exit(0))
     .catch(() => process.exit(1))
 }
 
