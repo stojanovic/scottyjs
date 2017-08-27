@@ -52,7 +52,7 @@ function showHelp() {
     ${colors.magenta('--region')}  ${colors.cyan('or')} ${colors.magenta('-r')}    AWS region where the files will be uploaded ${colors.cyan('| default: saved region if exists or a list to choose one if it is not saved yet')}
     ${colors.magenta('--force')}   ${colors.cyan('or')} ${colors.magenta('-f')}    Update the bucket without asking, region can be overridden with ${colors.magenta('-r')} ${colors.cyan('| default: false')}
     ${colors.magenta('--update')}  ${colors.cyan('or')} ${colors.magenta('-u')}    Update existing bucket ${colors.cyan('| default: false')}
-    ${colors.magenta('--vaporize')}  ${colors.cyan('or')} ${colors.magenta('-d')}  Delete existing bucket ${colors.cyan('| default: false')}
+    ${colors.magenta('--delete')}  ${colors.cyan('or')} ${colors.magenta('-d')}    Delete existing bucket ${colors.cyan('| default: false')}
 
     ✤ ✤ ✤
 
@@ -75,10 +75,10 @@ function readArgs() {
       r: 'region',
       f: 'force',
       u: 'update',
-      d: 'vaporize'
+      d: 'delete'
     },
     string: ['source', 'bucket', 'region'],
-    boolean: ['quiet', 'website', 'spa', 'force', 'update', 'vaporize'],
+    boolean: ['quiet', 'website', 'spa', 'force', 'update', 'delete'],
     default: {
       source: process.cwd(),
       bucket: path.parse(process.cwd()).name
@@ -162,7 +162,7 @@ function cmd(console) {
 }
 
 function beamUp (args, region, console) {
-  return scotty(args.source, args.bucket, region, args.website, args.spa, args.update, args.vaporize, args.force, args.quiet, console)
+  return scotty(args.source, args.bucket, region, args.website, args.spa, args.update, args.delete, args.force, args.quiet, console)
     .then(endpoint => clipboardy.write(endpoint))
     .then(() => process.exit(0))
     .catch(() => process.exit(1))

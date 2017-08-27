@@ -51,6 +51,7 @@ beam-me-up {options}
 - _--region_ or _-r_ - AWS region where the files will be uploaded, default: saved region if exists or a list to choose one if it is not saved yet
 - _--force_ or _-f_ - Update the bucket without asking (default: false, forced region can be overridden with _-r_)
 - _--update_ or _-u_ - Update existing bucket (default: false)
+- _--delete_ or _-d_ - Delete existing bucket (default: false)
 
 ### Examples
 
