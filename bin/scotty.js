@@ -52,6 +52,7 @@ function showHelp() {
     ${colors.magenta('--region')}  ${colors.cyan('or')} ${colors.magenta('-r')}    AWS region where the files will be uploaded ${colors.cyan('| default: saved region if exists or a list to choose one if it is not saved yet')}
     ${colors.magenta('--force')}   ${colors.cyan('or')} ${colors.magenta('-f')}    Update the bucket without asking, region can be overridden with ${colors.magenta('-r')} ${colors.cyan('| default: false')}
     ${colors.magenta('--update')}  ${colors.cyan('or')} ${colors.magenta('-u')}    Update existing bucket ${colors.cyan('| default: false')}
+    ${colors.magenta('--vaporize')}  ${colors.cyan('or')} ${colors.magenta('-d')}  Delete existing bucket ${colors.cyan('| default: false')}
 
     ✤ ✤ ✤
 
@@ -73,10 +74,11 @@ function readArgs() {
       b: 'bucket',
       r: 'region',
       f: 'force',
-      u: 'update'
+      u: 'update',
+      d: 'vaporize'
     },
     string: ['source', 'bucket', 'region'],
-    boolean: ['quiet', 'website', 'spa', 'force', 'update'],
+    boolean: ['quiet', 'website', 'spa', 'force', 'update', 'vaporize'],
     default: {
       source: process.cwd(),
       bucket: path.parse(process.cwd()).name
