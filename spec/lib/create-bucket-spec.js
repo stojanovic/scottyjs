@@ -52,14 +52,26 @@ describe('Create a bucket', () => {
       .catch(done.fail)
   })
 
-  it('should invoke createBucket method of s3 class with options', done => {
+  it('should invoke createBucket method of s3 class with options (us-east-1)', done => {
     underTest('bucketName', 'us-east-1', s3spy)
+      .then(() => {
+        expect(s3spy.createBucket).toHaveBeenCalledWith({
+          Bucket: 'bucketName',
+          ACL: 'public-read'
+        })
+        done()
+      })
+      .catch(done.fail)
+  })
+
+  it('should invoke createBucket method of s3 class with options', done => {
+    underTest('bucketName', 'eu-central-1', s3spy)
       .then(() => {
         expect(s3spy.createBucket).toHaveBeenCalledWith({
           Bucket: 'bucketName',
           ACL: 'public-read',
           CreateBucketConfiguration: {
-            LocationConstraint: 'us-east-1'
+            LocationConstraint: 'eu-central-1'
           }
         })
         done()
