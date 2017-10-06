@@ -11,7 +11,7 @@ Deploy static websites or folders to AWS S3 with a single command
 [![npm](https://img.shields.io/npm/v/scottyjs.svg?maxAge=2592000?style=plastic)](https://www.npmjs.com/package/scottyjs)
 [![npm](https://img.shields.io/npm/dt/scottyjs.svg?maxAge=2592000?style=plastic)](https://www.npmjs.com/package/scottyjs)
 [![npm](https://img.shields.io/npm/l/scottyjs.svg?maxAge=2592000?style=plastic)](https://github.com/stojanovic/scottyjs/blob/master/LICENSE)
-[![Join the chat at https://gitter.im/scottyjs/scotty](https://badges.gitter.im/scottyjs/scotty.svg)](https://gitter.im/scottyjs/scotty?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)	
+[![Join the chat at https://gitter.im/scottyjs/scotty](https://badges.gitter.im/scottyjs/scotty.svg)](https://gitter.im/scottyjs/scotty?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ## Install
 
@@ -48,6 +48,7 @@ beam-me-up {options}
 - _--spa_ - Set uploaded folder as a single page app (default: false)
 - _--source_  or _-s_ - Source of the folder that will be uploaded (default: current folder)
 - _--bucket_ or _-b_ - Name of the S3 bucket (default: name of the current folder)
+- _--prefix_ or _-p_ - Prefix on the S3 bucket (default: the root of the bucket)
 - _--region_ or _-r_ - AWS region where the files will be uploaded, default: saved region if exists or a list to choose one if it is not saved yet
 - _--force_ or _-f_ - Update the bucket without asking (default: false, forced region can be overridden with _-r_)
 - _--update_ or _-u_ - Update existing bucket (default: false)
@@ -74,6 +75,22 @@ scotty --spa --source ./build --bucket some-bucket-name
 ```
 
 With `--spa` flag, Scotty will set required redirects for your single page app, so your app can use pushState out of the box.
+
+#### _Shared bucket_ application
+
+To deploy multiple apps to a single bucket you can make use of the `--prefix`
+option. This comes in handy when your CI system deploys to a staging system
+with each branch as a pathname. Eg. the `master` branch should go to bucket
+root (`/`), so you do not set the prefix. The `feature/fancy-stuff` branch
+should go to the bucket path `feature/fancy-stuff` so just add this as the
+prefix. Here comes a command line example:
+
+```shell
+# deploy your master branch build to bucket root
+scotty --source ./build --bucket some-bucket-name
+# deploy your branch build to the branch name on the bucket
+scotty --source_ ./build --bucket some-bucket-name --prefix your/branch
+```
 
 ## Test
 
