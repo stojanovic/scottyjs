@@ -42,18 +42,19 @@ function showHelp() {
 
     AVAILABLE OPTIONS:
 
-    ${colors.magenta('--help')}    ${colors.cyan('or')} ${colors.magenta('-h')}    Print this help
-    ${colors.magenta('--version')} ${colors.cyan('or')} ${colors.magenta('-v')}    Print the current version
-    ${colors.magenta('--quiet')}   ${colors.cyan('or')} ${colors.magenta('-q')}    Suppress output when executing commands ${colors.cyan('| default: false')}
-    ${colors.magenta('--website')} ${colors.cyan('or')} ${colors.magenta('-w')}    Set uploaded folder as a static website ${colors.cyan('| default: false')}
-    ${colors.magenta('--spa')}              Set uploaded folder as a single page app and redirect all non-existing pages to index.html ${colors.cyan('| default: false')}
-    ${colors.magenta('--source')}  ${colors.cyan('or')} ${colors.magenta('-s')}    Source of the folder that will be uploaded ${colors.cyan('| default: current folder')}
-    ${colors.magenta('--bucket')}  ${colors.cyan('or')} ${colors.magenta('-b')}    Name of the S3 bucket ${colors.cyan('| default: name of the current folder')}
-    ${colors.magenta('--prefix')}  ${colors.cyan('or')} ${colors.magenta('-p')}    Prefix on the S3 bucket ${colors.cyan('| default: the root of the bucket')}
-    ${colors.magenta('--region')}  ${colors.cyan('or')} ${colors.magenta('-r')}    AWS region where the files will be uploaded ${colors.cyan('| default: saved region if exists or a list to choose one if it is not saved yet')}
-    ${colors.magenta('--force')}   ${colors.cyan('or')} ${colors.magenta('-f')}    Update the bucket without asking, region can be overridden with ${colors.magenta('-r')} ${colors.cyan('| default: false')}
-    ${colors.magenta('--update')}  ${colors.cyan('or')} ${colors.magenta('-u')}    Update existing bucket ${colors.cyan('| default: false')}
-    ${colors.magenta('--delete')}  ${colors.cyan('or')} ${colors.magenta('-d')}    Delete existing bucket ${colors.cyan('| default: false')}
+    ${colors.magenta('--help')}        ${colors.cyan('or')} ${colors.magenta('-h')}    Print this help
+    ${colors.magenta('--version')}     ${colors.cyan('or')} ${colors.magenta('-v')}    Print the current version
+    ${colors.magenta('--quiet')}       ${colors.cyan('or')} ${colors.magenta('-q')}    Suppress output when executing commands ${colors.cyan('| default: false')}
+    ${colors.magenta('--noclipboard')} ${colors.cyan('or')} ${colors.magenta('-n')}    Do not copy the URL to clipboard ${colors.cyan('| default: false')}
+    ${colors.magenta('--website')}     ${colors.cyan('or')} ${colors.magenta('-w')}    Set uploaded folder as a static website ${colors.cyan('| default: false')}
+    ${colors.magenta('--spa')}                  Set uploaded folder as a single page app and redirect all non-existing pages to index.html ${colors.cyan('| default: false')}
+    ${colors.magenta('--source')}      ${colors.cyan('or')} ${colors.magenta('-s')}    Source of the folder that will be uploaded ${colors.cyan('| default: current folder')}
+    ${colors.magenta('--bucket')}      ${colors.cyan('or')} ${colors.magenta('-b')}    Name of the S3 bucket ${colors.cyan('| default: name of the current folder')}
+    ${colors.magenta('--prefix')}      ${colors.cyan('or')} ${colors.magenta('-p')}    Prefix on the S3 bucket ${colors.cyan('| default: the root of the bucket')}
+    ${colors.magenta('--region')}      ${colors.cyan('or')} ${colors.magenta('-r')}    AWS region where the files will be uploaded ${colors.cyan('| default: saved region if exists or a list to choose one if it is not saved yet')}
+    ${colors.magenta('--force')}       ${colors.cyan('or')} ${colors.magenta('-f')}    Update the bucket without asking, region can be overridden with ${colors.magenta('-r')} ${colors.cyan('| default: false')}
+    ${colors.magenta('--update')}      ${colors.cyan('or')} ${colors.magenta('-u')}    Update existing bucket ${colors.cyan('| default: false')}
+    ${colors.magenta('--delete')}      ${colors.cyan('or')} ${colors.magenta('-d')}    Delete existing bucket ${colors.cyan('| default: false')}
 
     ✤ ✤ ✤
 
@@ -70,6 +71,7 @@ function readArgs() {
       h: 'help',
       v: 'version',
       q: 'quiet',
+      n: 'noclipboard',
       w: 'website',
       s: 'source',
       b: 'bucket',
@@ -165,8 +167,13 @@ function cmd(console) {
 }
 
 function beamUp (args, region, console) {
-  return scotty(args.source, args.bucket, args.prefix, region, args.website, args.spa, args.update, args.delete, args.force, args.quiet, console)
-    .then(endpoint => clipboardy.write(endpoint))
+  promise = scotty(args.source, args.bucket, args.prefix, region, args.website, args.spa, args.update, args.delete, args.force, args.quiet, !args.noclipboard, console)
+
+  if (!args.noclipboard) {
+    promise.then(endpoint => clipboardy.write(endpoint))
+  }
+
+  return promise
     .then(() => process.exit(0))
     .catch(() => process.exit(1))
 }
