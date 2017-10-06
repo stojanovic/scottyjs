@@ -43,6 +43,7 @@ beam-me-up {options}
 
 - _--help_ or _-h_ - Print this help
 - _--version_ or _-v_ - Print the current version
+- _--noclipboard_ or _-n_ - Do not copy the URL to clipboard (default: false)
 - _--quiet_ or _-q_ - Suppress output when executing commands (default: false)
 - _--website_ or _-w_ - Set uploaded folder as a static website (default: false)
 - _--spa_ - Set uploaded folder as a single page app (default: false)
