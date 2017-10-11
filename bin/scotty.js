@@ -57,6 +57,7 @@ function showHelp() {
     ${colors.magenta('--delete')}      ${colors.cyan('or')} ${colors.magenta('-d')}    Delete existing bucket ${colors.cyan('| default: false')}
     ${colors.magenta('--nocdn')}       ${colors.cyan('or')} ${colors.magenta('-c')}    Disable Cloudfront handling ${colors.cyan('| default: false')}
     ${colors.magenta('--urlonly')}     ${colors.cyan('or')} ${colors.magenta('-o')}    Only output the resulting URL, CDN or S3 according to options ${colors.cyan('| default: false')}
+    ${colors.magenta('--expire')}      ${colors.cyan('or')} ${colors.magenta('-e')}    Delete objects on bucket older than n days ${colors.cyan('| default: no expiration')}
 
     ✤ ✤ ✤
 
@@ -83,7 +84,8 @@ function readArgs() {
       u: 'update',
       d: 'delete',
       c: 'nocdn',
-      o: 'urlonly'
+      o: 'urlonly',
+      e: 'expire'
     },
     string: ['source', 'bucket', 'prefix', 'region'],
     boolean: ['quiet', 'website', 'spa', 'force', 'update', 'delete'],
@@ -171,7 +173,7 @@ function cmd(console) {
 }
 
 function beamUp (args, region, console) {
-  promise = scotty(args.source, args.bucket, args.prefix, region, args.website, args.spa, args.update, args.delete, args.nocdn, args.urlonly, args.force, args.quiet, !args.noclipboard, console)
+  promise = scotty(args.source, args.bucket, args.prefix, region, args.website, args.spa, args.update, args.delete, args.nocdn, args.urlonly, args.expire, args.force, args.quiet, !args.noclipboard, console)
 
   if (!args.noclipboard) {
     promise.then(endpoint => clipboardy.write(endpoint))
