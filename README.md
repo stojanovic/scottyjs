@@ -54,6 +54,9 @@ beam-me-up {options}
 - _--force_ or _-f_ - Update the bucket without asking (default: false, forced region can be overridden with _-r_)
 - _--update_ or _-u_ - Update existing bucket (default: false)
 - _--delete_ or _-d_ - Delete existing bucket (default: false)
+- _--nocdn_ or _-c_ - Disable Cloudfront handling (default: false)
+- _--urlonly_ or _-o_ - Only output the resulting URL, CDN or S3 according to options (default: false)
+- _--expire_ or _-e_ - elete objects on bucket older than n days (default: no expiration)
 
 ### Examples
 
