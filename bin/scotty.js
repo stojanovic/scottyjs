@@ -8,6 +8,7 @@ const scotty = require('../index')
 const inquirer = require('inquirer')
 const colors = require('colors')
 const clipboardy = require('clipboardy')
+const configFilePath = path.join(__dirname, '..', '.scotty-config.json')
 
 // Supported regions from http://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region
 const AWS_REGIONS = [
@@ -58,6 +59,7 @@ function showHelp() {
     ${colors.magenta('--nocdn')}       ${colors.cyan('or')} ${colors.magenta('-c')}    Disable Cloudfront handling ${colors.cyan('| default: false')}
     ${colors.magenta('--urlonly')}     ${colors.cyan('or')} ${colors.magenta('-o')}    Only output the resulting URL, CDN or S3 according to options ${colors.cyan('| default: false')}
     ${colors.magenta('--expire')}      ${colors.cyan('or')} ${colors.magenta('-e')}    Delete objects on bucket older than n days ${colors.cyan('| default: no expiration')}
+    ${colors.magenta('--aws-profile')} ${colors.cyan('or')} ${colors.magenta('-a')}    AWS profile to be used ${colors.cyan('| default: default')}
 
     ✤ ✤ ✤
 
@@ -85,9 +87,10 @@ function readArgs() {
       d: 'delete',
       c: 'nocdn',
       o: 'urlonly',
-      e: 'expire'
+      e: 'expire',
+      a: 'aws-profile'
     },
-    string: ['source', 'bucket', 'prefix', 'region'],
+    string: ['source', 'bucket', 'prefix', 'region', 'aws-profile'],
     boolean: ['quiet', 'website', 'spa', 'force', 'update', 'delete'],
     default: {
       source: process.cwd(),
@@ -97,11 +100,19 @@ function readArgs() {
   })
 }
 
+function getConfigFile() {
+  try {
+    return require(configFilePath);
+  } catch(e) {
+    return {}
+  }
+}
+
 function getDefaultRegion() {
   return new Promise((resolve, reject) => {
-    fs.readFile(path.join(__dirname, '..', '.scotty-config.json'), (err, data) => {
+    fs.readFile(configFilePath, (err, data) => {
       if (err && err.code === 'ENOENT') {
-        fs.readFile(path.join('/tmp', '.scotty-config.json'), (err, data) => {
+        fs.readFile(configFilePath, (err, data) => {
           if (data) {
             const region = JSON.parse(data.toString('utf8')).region
             if (region)
@@ -125,9 +136,9 @@ function getDefaultRegion() {
 
 function saveDefaultRegion(region) {
   return new Promise((resolve) => {
-    fs.writeFile(path.join(__dirname, '..', '.scotty-config.json'), `{"region":"${region}"}`, 'utf8', err => {
+    fs.writeFile(configFilePath, `{"region":"${region}"}`, 'utf8', err => {
       if (err) {
-        fs.writeFile(path.join('/tmp', '.scotty-config.json'), `{"region":"${region}"}`, 'utf8', () => {
+        fs.writeFile(configFilePath, `{"region":"${region}"}`, 'utf8', () => {
           resolve(region)
         })
       }
@@ -135,6 +146,19 @@ function saveDefaultRegion(region) {
       resolve(region)
     })
   })
+}
+
+function setAWSProfile(profile) {
+  // Get the .scotty-config.json file content
+  let configFile = getConfigFile();
+
+  // Replace the file value for the CLI one if exist
+  if(profile) {
+    configFile.profile = profile
+  }
+
+  // update the Credentials for the current value or the default value which is 'default'
+  AWS.config.credentials = new AWS.SharedIniFileCredentials({ profile: configFile.profile || 'default' })
 }
 
 function cmd(console) {
@@ -146,7 +170,10 @@ function cmd(console) {
   if (args.help)
     return showHelp()
 
-  if (!AWS.config.credentials)
+  setAWSProfile(args['aws-profile'])
+
+  // if a non-existent profile is set AWS.config.credentials.accessKeyId will be undefined
+  if (!AWS.config.credentials || !AWS.config.credentials.accessKeyId)
     return console.log(`Set AWS credentials first. Guide is available here: http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html`)
 
   if (!args.region) {
