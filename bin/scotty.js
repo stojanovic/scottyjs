@@ -48,7 +48,7 @@ function showHelp() {
     ${colors.magenta('--quiet')}       ${colors.cyan('or')} ${colors.magenta('-q')}    Suppress output when executing commands ${colors.cyan('| default: false')}
     ${colors.magenta('--noclipboard')} ${colors.cyan('or')} ${colors.magenta('-n')}    Do not copy the URL to clipboard ${colors.cyan('| default: false')}
     ${colors.magenta('--website')}     ${colors.cyan('or')} ${colors.magenta('-w')}    Set uploaded folder as a static website ${colors.cyan('| default: false')}
-    ${colors.magenta('--spa')}                  Set uploaded folder as a single page app and redirect all non-existing pages to index.html ${colors.cyan('| default: false')}
+    ${colors.magenta('--spa')}                                                         Set uploaded folder as a single page app and redirect all non-existing pages to index.html ${colors.cyan('| default: false')}
     ${colors.magenta('--source')}      ${colors.cyan('or')} ${colors.magenta('-s')}    Source of the folder that will be uploaded ${colors.cyan('| default: current folder')}
     ${colors.magenta('--bucket')}      ${colors.cyan('or')} ${colors.magenta('-b')}    Name of the S3 bucket ${colors.cyan('| default: name of the current folder')}
     ${colors.magenta('--prefix')}      ${colors.cyan('or')} ${colors.magenta('-p')}    Prefix on the S3 bucket ${colors.cyan('| default: the root of the bucket')}
@@ -59,7 +59,7 @@ function showHelp() {
     ${colors.magenta('--nocdn')}       ${colors.cyan('or')} ${colors.magenta('-c')}    Disable Cloudfront handling ${colors.cyan('| default: false')}
     ${colors.magenta('--urlonly')}     ${colors.cyan('or')} ${colors.magenta('-o')}    Only output the resulting URL, CDN or S3 according to options ${colors.cyan('| default: false')}
     ${colors.magenta('--expire')}      ${colors.cyan('or')} ${colors.magenta('-e')}    Delete objects on bucket older than n days ${colors.cyan('| default: no expiration')}
-    ${colors.magenta('--aws-profile')} ${colors.cyan('or')} ${colors.magenta('-a')}    AWS profile to be used ${colors.cyan('| default: default')}
+    ${colors.magenta('--profile')}     ${colors.cyan('or')} ${colors.magenta('-a')}    AWS profile to be used ${colors.cyan('| default: default')}
 
     ✤ ✤ ✤
 
@@ -88,9 +88,9 @@ function readArgs() {
       c: 'nocdn',
       o: 'urlonly',
       e: 'expire',
-      a: 'aws-profile'
+      a: 'profile'
     },
-    string: ['source', 'bucket', 'prefix', 'region', 'aws-profile'],
+    string: ['source', 'bucket', 'prefix', 'region', 'profile'],
     boolean: ['quiet', 'website', 'spa', 'force', 'update', 'delete'],
     default: {
       source: process.cwd(),
@@ -170,7 +170,7 @@ function cmd(console) {
   if (args.help)
     return showHelp()
 
-  setAWSProfile(args['aws-profile'])
+  setAWSProfile(args.profile)
 
   // if a non-existent profile is set AWS.config.credentials.accessKeyId will be undefined
   if (!AWS.config.credentials || !AWS.config.credentials.accessKeyId)
