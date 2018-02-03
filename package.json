@@ -9,7 +9,8 @@
   },
   "scripts": {
     "pretest": "eslint lib spec *.js",
-    "test": "snyk test && node spec/support/jasmine-runner.js",
+    "snyk&test": "snyk test && node spec/support/jasmine-runner.js",
+    "test": "node spec/support/jasmine-runner.js",
     "debug": "node debug spec/support/jasmine-runner.js"
   },
   "keywords": [
