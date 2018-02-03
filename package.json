@@ -26,7 +26,6 @@
     "colors": "^1.1.2",
     "get-folder-size": "^1.0.0",
     "inquirer": "^3.2.1",
-    "lodash": "^4.17.4",
     "mime": "^1.4.1",
     "minimist": "^1.2.0"
   },
