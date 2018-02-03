@@ -200,7 +200,8 @@ function cmd(console) {
 }
 
 function beamUp (args, region, console) {
-  promise = scotty(args.source, args.bucket, args.prefix, region, args.website, args.spa, args.update, args.delete, args.nocdn, args.urlonly, args.expire, args.force, args.quiet, !args.noclipboard, console)
+  const s3 = new AWS.S3()
+  promise = scotty(args.source, args.bucket, args.prefix, region, args.website, args.spa, args.update, args.delete, args.nocdn, args.urlonly, args.expire, args.force, args.quiet, !args.noclipboard, console, s3)
 
   if (!args.noclipboard) {
     promise.then(endpoint => clipboardy.write(endpoint))
