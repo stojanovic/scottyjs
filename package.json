@@ -9,7 +9,7 @@
   },
   "scripts": {
     "pretest": "eslint lib spec *.js",
-    "test": "node spec/support/jasmine-runner.js",
+    "test": "snyk test && node spec/support/jasmine-runner.js",
     "debug": "node debug spec/support/jasmine-runner.js"
   },
   "keywords": [
@@ -19,7 +19,7 @@
   "author": "Slobodan Stojanovic <slobodan@cloudhorizon.com> (http://slobodan.me/)",
   "license": "MIT",
   "dependencies": {
-    "aws-sdk": "^2.95.0",
+    "aws-sdk": "^2.178.0",
     "chalk": "^2.1.0",
     "clipboardy": "^1.1.4",
     "colors": "^1.1.2",
@@ -32,7 +32,8 @@
     "eslint": "^3.19.0",
     "eslint-config-defaults": "^9.0.0",
     "jasmine": "^2.7.0",
-    "jasmine-spec-reporter": "^4.2.0"
+    "jasmine-spec-reporter": "^4.2.0",
+    "snyk": "^1.62.2"
   },
   "repository": {
     "type": "git",
