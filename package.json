@@ -4,8 +4,7 @@
   "description": "A simple CLI tool that deploys your project to AWS S3",
   "main": "index.js",
   "bin": {
-    "scotty": "./bin/scotty.js",
-    "beam-me-up": "./bin/scotty.js"
+    "scotty-beta": "./bin/cmd.js"
   },
   "scripts": {
     "pretest": "eslint lib spec *.js",
