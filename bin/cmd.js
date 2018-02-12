@@ -33,7 +33,7 @@ function readArgs() {
     default: {
       source: process.cwd(),
       bucket: path.parse(process.cwd()).name,
-      config: path.join(__dirname, 'scotty.json')
+      config: path.join(process.cwd(), 'scotty.json')
     }
   })
 }
