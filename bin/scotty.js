@@ -104,7 +104,7 @@ function readArgs() {
 
 function getConfigFile() {
   try {
-    return require(configFilePath);
+    return require(configFilePath)
   } catch(e) {
     return {}
   }
@@ -151,16 +151,15 @@ function saveDefaultRegion(region) {
 }
 
 function setAWSProfile(profile) {
-  // Get the .scotty-config.json file content
-  let configFile = getConfigFile();
+  const options = {}
 
   // Replace the file value for the CLI one if exist
-  if(profile) {
-    configFile.profile = profile
+  if (profile) {
+    options.profile = profile
   }
 
   // update the Credentials for the current value or the default value which is 'default'
-  AWS.config.credentials = new AWS.SharedIniFileCredentials({ profile: configFile.profile || 'default' })
+  AWS.config.credentials = new AWS.SharedIniFileCredentials(options)
 }
 
 function cmd(console) {
@@ -202,7 +201,10 @@ function cmd(console) {
 }
 
 function beamUp (args, region, console) {
-  promise = scotty(args.source, args.bucket, args.prefix, region, args.website, args.spa, args.update, args.delete, args.nocdn, args.urlonly, args.expire, args.force, args.empty, args.quiet, !args.noclipboard, console)
+  const s3 = new AWS.S3({
+    region: region
+  })
+  const promise = scotty(args.source, args.bucket, args.prefix, region, args.website, args.spa, args.update, args.delete, args.nocdn, args.urlonly, args.expire, args.force, args.empty, args.quiet, !args.noclipboard, console, s3)
 
   if (!args.noclipboard) {
     promise.then(endpoint => clipboardy.write(endpoint))
