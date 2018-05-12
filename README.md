@@ -58,6 +58,7 @@ beam-me-up {options}
 - _--urlonly_ or _-o_ - Only output the resulting URL, CDN or S3 according to options (default: false)
 - _--expire_ or _-e_ - delete objects on bucket older than n days (default: no expiration)
 - _--profile or _-a_ - AWS profile to be used (default: 'default')
+- _--empty or _-y_ - Empty the bucket (Delete all objects before upload files) (default: false)
 
 ### Examples
 

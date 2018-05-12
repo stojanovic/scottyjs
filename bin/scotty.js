@@ -60,6 +60,7 @@ function showHelp() {
     ${colors.magenta('--urlonly')}     ${colors.cyan('or')} ${colors.magenta('-o')}    Only output the resulting URL, CDN or S3 according to options ${colors.cyan('| default: false')}
     ${colors.magenta('--expire')}      ${colors.cyan('or')} ${colors.magenta('-e')}    Delete objects on bucket older than n days ${colors.cyan('| default: no expiration')}
     ${colors.magenta('--profile')}     ${colors.cyan('or')} ${colors.magenta('-a')}    AWS profile to be used ${colors.cyan('| default: default')}
+    ${colors.magenta('--empty')}       ${colors.cyan('or')} ${colors.magenta('-y')}    Empty the bucket (Delete all objects before upload files) ${colors.cyan('| default: false')}
 
     ✤ ✤ ✤
 
@@ -88,10 +89,11 @@ function readArgs() {
       c: 'nocdn',
       o: 'urlonly',
       e: 'expire',
-      a: 'profile'
+      a: 'profile',
+      y: 'empty'
     },
     string: ['source', 'bucket', 'prefix', 'region', 'profile'],
-    boolean: ['quiet', 'website', 'spa', 'force', 'update', 'delete'],
+    boolean: ['quiet', 'website', 'spa', 'force', 'update', 'delete', 'empty'],
     default: {
       source: process.cwd(),
       bucket: path.parse(process.cwd()).name,
@@ -202,7 +204,7 @@ function beamUp (args, region, console) {
   const s3 = new AWS.S3({
     region: region
   })
-  const promise = scotty(args.source, args.bucket, args.prefix, region, args.website, args.spa, args.update, args.delete, args.nocdn, args.urlonly, args.expire, args.force, args.quiet, !args.noclipboard, console, s3)
+  const promise = scotty(args.source, args.bucket, args.prefix, region, args.website, args.spa, args.update, args.delete, args.nocdn, args.urlonly, args.expire, args.force, args.empty, args.quiet, !args.noclipboard, console, s3)
 
   if (!args.noclipboard) {
     promise.then(endpoint => clipboardy.write(endpoint))
