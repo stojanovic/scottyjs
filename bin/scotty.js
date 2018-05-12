@@ -156,10 +156,10 @@ function setAWSProfile(profile) {
   // Replace the file value for the CLI one if exist
   if (profile) {
     options.profile = profile
+    
+    // update the Credentials for the current value or the default value which is 'default'
+    AWS.config.credentials = new AWS.SharedIniFileCredentials(options)
   }
-
-  // update the Credentials for the current value or the default value which is 'default'
-  AWS.config.credentials = new AWS.SharedIniFileCredentials(options)
 }
 
 function cmd(console) {
