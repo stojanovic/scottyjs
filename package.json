@@ -11,7 +11,9 @@
     "pretest": "eslint lib spec *.js",
     "snyk&test": "snyk test && node spec/support/jasmine-runner.js",
     "test": "node spec/support/jasmine-runner.js",
-    "debug": "node debug spec/support/jasmine-runner.js"
+    "debug": "node debug spec/support/jasmine-runner.js",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "keywords": [
     "cli",
@@ -27,14 +29,14 @@
     "get-folder-size": "^1.0.0",
     "inquirer": "^3.2.2",
     "mime": "^1.4.1",
-    "minimist": "^1.2.0"
+    "minimist": "^1.2.0",
+    "snyk": "^1.192.4"
   },
   "devDependencies": {
     "eslint": "^3.19.0",
     "eslint-config-defaults": "^9.0.0",
     "jasmine": "^2.7.0",
-    "jasmine-spec-reporter": "^4.2.0",
-    "snyk": "^1.62.2"
+    "jasmine-spec-reporter": "^4.2.0"
   },
   "repository": {
     "type": "git",
@@ -43,5 +45,6 @@
   "bugs": {
     "url": "https://github.com/stojanovic/scottyjs/issues"
   },
-  "homepage": "https://github.com/stojanovic/scottyjs#readme"
+  "homepage": "https://github.com/stojanovic/scottyjs#readme",
+  "snyk": true
 }
