@@ -1,9 +1,13 @@
 # Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
-version: v1.10.1
+version: v1.13.5
 # ignores vulnerabilities until expiry date; change duration by modifying expiry date
 ignore:
   'npm:crypto-browserify:20140722':
     - aws-sdk > crypto-browserify:
         reason: No patch available
         expires: '2018-01-26T14:26:53.888Z'
-patch: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  SNYK-JS-LODASH-450202:
+    - inquirer > lodash:
+        patched: '2019-07-09T06:58:59.642Z'
