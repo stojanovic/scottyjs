@@ -1,5 +1,9 @@
 # Scotty.js
 
+As you probably noticed, Scotty.js is not active anymore. Working on Scotty.js was fun, but AWS released AWS Amplify in the meantime, and tools such as Scotty.js are no longer needed. Please take a look at the [AWS Amplify Console](https://aws.amazon.com/amplify/hosting/). It's an excellent tool for hosting static websites and single-page applications.
+
+---
+
 Deploy static websites or folders to AWS S3 with a single command
 
 <h1 align="center">
