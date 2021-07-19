@@ -48,7 +48,7 @@ function showHelp() {
     ${colors.magenta('--quiet')}       ${colors.cyan('or')} ${colors.magenta('-q')}    Suppress output when executing commands ${colors.cyan('| default: false')}
     ${colors.magenta('--noclipboard')} ${colors.cyan('or')} ${colors.magenta('-n')}    Do not copy the URL to clipboard ${colors.cyan('| default: false')}
     ${colors.magenta('--website')}     ${colors.cyan('or')} ${colors.magenta('-w')}    Set uploaded folder as a static website ${colors.cyan('| default: false')}
-    ${colors.magenta('--spa')}                                                         Set uploaded folder as a single page app and redirect all non-existing pages to index.html ${colors.cyan('| default: false')}
+    ${colors.magenta('--spa')}                  Set uploaded folder as a single page app and redirect all non-existing pages to index.html ${colors.cyan('| default: false')}
     ${colors.magenta('--source')}      ${colors.cyan('or')} ${colors.magenta('-s')}    Source of the folder that will be uploaded ${colors.cyan('| default: current folder')}
     ${colors.magenta('--bucket')}      ${colors.cyan('or')} ${colors.magenta('-b')}    Name of the S3 bucket ${colors.cyan('| default: name of the current folder')}
     ${colors.magenta('--prefix')}      ${colors.cyan('or')} ${colors.magenta('-p')}    Prefix on the S3 bucket ${colors.cyan('| default: the root of the bucket')}
