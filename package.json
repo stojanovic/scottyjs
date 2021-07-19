@@ -30,7 +30,7 @@
     "minimist": "^1.2.0"
   },
   "devDependencies": {
-    "eslint": "^3.19.0",
+    "eslint": "^6.6.0",
     "eslint-config-defaults": "^9.0.0",
     "jasmine": "^2.7.0",
     "jasmine-spec-reporter": "^4.2.0",
